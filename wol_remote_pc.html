@@ -3,191 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>원격 PC 부팅 - 좋은날금박</title>
+    <title>좋은날금박 원격 PC 부팅</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Malgun Gothic', sans-serif;
-            background-color: #707f7a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
+        
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
-            background-color: rgba(200, 222, 186, 0.98);
-            border-radius: 30px;
-            border: 10pt solid #294731;
+            background: white;
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-
-        .header {
+        
+        h1 {
             text-align: center;
+            color: #707f7a;
             margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #478358;
-        }
-
-        .header h1 {
-            color: #294731;
             font-size: 48px;
-            margin-bottom: 10px;
             font-weight: bold;
         }
-
-        .header p {
-            color: #666;
-            font-size: 28px;
-        }
-
+        
         .pc-list {
             margin-bottom: 30px;
         }
-
-        .pc-card {
+        
+        .pc-item {
             background: #f8f9fa;
-            border: 3px solid #e0e0e0;
+            border: 3px solid #707f7a;
             border-radius: 15px;
-            padding: 30px;
+            padding: 25px;
             margin-bottom: 20px;
-            transition: all 0.3s;
+            position: relative;
         }
-
-        .pc-card:hover {
-            border-color: #478358;
-            box-shadow: 0 5px 15px rgba(71, 131, 88, 0.3);
+        
+        .pc-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
         }
-
-        .pc-card.active {
-            border-color: #478358;
-            background: #f0f4f2;
+        
+        .status-light {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 3px solid #333;
+            flex-shrink: 0;
+            position: relative;
         }
-
+        
+        .status-light.online {
+            background: radial-gradient(circle at 30% 30%, #7fff7f, #00cc00);
+            box-shadow: 0 0 15px #00cc00, 0 0 30px #00cc00;
+            animation: pulse-green 1.5s infinite;
+        }
+        
+        .status-light.offline {
+            background: radial-gradient(circle at 30% 30%, #ff7f7f, #cc0000);
+            box-shadow: 0 0 10px #cc0000;
+        }
+        
+        .status-light.checking {
+            background: radial-gradient(circle at 30% 30%, #ffff7f, #cccc00);
+            box-shadow: 0 0 10px #cccc00;
+            animation: pulse-yellow 0.8s infinite;
+        }
+        
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 15px #00cc00, 0 0 30px #00cc00; }
+            50% { box-shadow: 0 0 25px #00ff00, 0 0 50px #00ff00; }
+        }
+        
+        @keyframes pulse-yellow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .status-text {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        .status-text.online {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-text.offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-text.checking {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
         .pc-name {
             font-size: 32px;
             font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
+            color: #2c3e50;
         }
-
+        
         .pc-info {
             font-size: 22px;
-            font-size: 13px;
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            line-height: 1.6;
         }
-
-        .pc-status {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .status-unknown {
-            background: #e0e0e0;
-            color: #666;
-        }
-
-        .status-on {
-            background: #4caf50;
-            color: white;
-        }
-
-        .status-booting {
-            background: #ff9800;
-            color: white;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
+        
         .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
-
+        
         button {
-            padding: 20px 30px;
-            border: none;
-            border-radius: 15px;
+            flex: 1;
+            min-width: 150px;
+            padding: 20px;
             font-size: 26px;
             font-weight: bold;
+            border: none;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
         }
-
+        
         .btn-wake {
-            background: #5A8348;
+            background: #707f7a;
             color: white;
-            grid-column: 1 / -1;
         }
-
+        
         .btn-wake:hover {
-            background: #6b9b57;
+            background: #5a6a65;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(90, 131, 72, 0.4);
         }
-
-        .btn-wake:active {
-            transform: translateY(0);
+        
+        .btn-check {
+            background: #17a2b8;
+            color: white;
         }
-
+        
+        .btn-check:hover {
+            background: #138496;
+        }
+        
         .btn-rdp {
-            background: #4CAF50;
+            background: #3498db;
             color: white;
         }
-
+        
         .btn-rdp:hover {
-            background: #45a049;
+            background: #2980b9;
         }
-
+        
         .btn-edit {
-            background: #2196F3;
+            background: #f39c12;
             color: white;
         }
-
+        
         .btn-edit:hover {
-            background: #1976D2;
+            background: #e67e22;
         }
-
-        .btn-wake:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
+        
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
         }
-
+        
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+        
         .add-pc-btn {
             width: 100%;
             padding: 25px;
-            background: white;
-            color: #478358;
-            border: 4px dashed #478358;
-            border-radius: 15px;
+            background: #27ae60;
+            color: white;
             font-size: 28px;
+            border: none;
+            border-radius: 12px;
             cursor: pointer;
             margin-bottom: 20px;
-            transition: all 0.3s;
         }
-
+        
         .add-pc-btn:hover {
-            background: #f0f4f2;
-            border-color: #294731;
+            background: #229954;
         }
-
+        
+        .refresh-all-btn {
+            width: 100%;
+            padding: 20px;
+            background: #17a2b8;
+            color: white;
+            font-size: 26px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .refresh-all-btn:hover {
+            background: #138496;
+        }
+        
         .modal {
             display: none;
             position: fixed;
@@ -195,512 +230,385 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.7);
             z-index: 1000;
-            align-items: center;
-            justify-content: center;
         }
-
-        .modal.show {
-            display: flex;
-        }
-
+        
         .modal-content {
-            background: rgba(200, 222, 186, 0.98);
-            padding: 30px;
-            border-radius: 30px;
-            border: 10pt solid #294731;
-            max-width: 500px;
-            width: 90%;
+            background: white;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 20px;
             max-height: 90vh;
             overflow-y: auto;
         }
-
-        .modal-header {
+        
+        .modal h2 {
             font-size: 36px;
-            font-weight: bold;
-            color: #294731;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #478358;
+            color: #707f7a;
+            margin-bottom: 30px;
         }
-
+        
         .form-group {
             margin-bottom: 25px;
         }
-
-        .form-group label {
+        
+        label {
             display: block;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
             font-size: 30px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
         }
-
-        .form-group input,
-        .form-group select {
+        
+        input {
             width: 100%;
-            padding: 22px;
-            border: 3px solid #478358;
-            border-radius: 12px;
+            padding: 18px;
             font-size: 32px;
-            background-color: #fff;
-            transition: border-color 0.3s;
+            border: 3px solid #ddd;
+            border-radius: 10px;
         }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #478358;
-            background-color: #fff;
-        }
-
-        .form-group small {
-            display: block;
+        
+        .help-text {
+            font-size: 20px;
             color: #666;
             margin-top: 8px;
-            font-size: 20px;
         }
-
+        
         .modal-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
         }
-
+        
         .btn-save {
-            background: #5A8348;
+            flex: 1;
+            padding: 20px;
+            background: #707f7a;
             color: white;
-            box-shadow: 0 4px 6px rgba(90, 131, 72, 0.4);
+            font-size: 26px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
         }
-
-        .btn-save:hover {
-            background: #6b9b57;
-            box-shadow: 0 6px 8px rgba(90, 131, 72, 0.5);
-            transform: translateY(-2px);
-        }
-
+        
         .btn-cancel {
-            background: #f44336;
+            flex: 1;
+            padding: 20px;
+            background: #95a5a6;
             color: white;
-            box-shadow: 0 4px 6px rgba(244, 67, 54, 0.4);
-        }
-
-        .btn-cancel:hover {
-            background: #da190b;
-            box-shadow: 0 6px 8px rgba(244, 67, 54, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .help-section {
-            background: #f8f9fa;
-            border: 4px solid #478358;
+            font-size: 26px;
+            border: none;
             border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .log {
+            background: #2c3e50;
+            color: #ecf0f1;
             padding: 20px;
-            margin-top: 20px;
-            font-family: 'Malgun Gothic', sans-serif;
-            font-weight: bold;
-        }
-
-        .help-section h3 {
-            color: #294731;
-            margin-bottom: 15px;
-            font-size: 19px;
-        }
-
-        .help-section ol {
-            margin-left: 20px;
-            color: #000;
-            font-size: 16px;
-        }
-
-        .help-section li {
-            margin-bottom: 8px;
-            line-height: 1.6;
-        }
-
-        .help-section code {
-            background: white;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-        }
-
-        .log-area {
-            background: #f8f9fa;
-            border: 3px solid #478358;
             border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
             max-height: 300px;
             overflow-y: auto;
-            font-family: 'Malgun Gothic', sans-serif;
+            font-family: 'Consolas', monospace;
             font-size: 20px;
         }
-
+        
         .log-entry {
-            padding: 10px 0;
-            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-left: 4px solid #707f7a;
+            background: rgba(255,255,255,0.05);
         }
-
-        .log-entry:last-child {
-            border-bottom: none;
+        
+        .last-check {
+            font-size: 18px;
+            color: #999;
+            margin-top: 5px;
         }
-
-        .log-time {
-            color: #666;
-            margin-right: 10px;
-        }
-
-        .log-success {
-            color: #4caf50;
-        }
-
-        .log-error {
-            color: #f44336;
-        }
-
-        .log-info {
-            color: #2196F3;
-        }
-
-        /* 모바일 최적화 - 70대 어르신용 큰 글씨 */
-        @media screen and (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-
-            .container {
-                border: 8pt solid #294731;
-                padding: 30px;
-                border-radius: 25px;
-            }
-
-            .header h1 {
-                font-size: 42px;
-            }
-
-            .pc-name {
-                font-size: 30px;
-            }
-
-            .pc-info {
-                font-size: 22px;
-            }
-
-            button {
-                padding: 22px 30px;
-                font-size: 26px;
-                min-height: 70px; /* 70대 어르신 터치하기 쉬운 크기 */
-            }
-
-            .add-pc-btn {
-                padding: 28px;
-                font-size: 28px;
-            }
-
-            .modal-content {
-                width: 95%;
-                padding: 20px;
-                border: 6pt solid #294731;
-            }
-
-            .help-section h3 {
-                font-size: 17px;
-            }
-
-            .help-section ol {
-                font-size: 14px;
-            }
-
-            .form-group input,
-            .form-group select {
-                font-size: 30px;
-                padding: 20px;
-            }
-        }
-
-        /* 아주 작은 화면 (스마트폰 세로) - 70대 어르신용 */
-        @media screen and (max-width: 480px) {
-            .container {
-                border: 6pt solid #294731;
-                padding: 25px;
-                border-radius: 20px;
-            }
-
-            .header h1 {
-                font-size: 38px;
-            }
-
-            .button-group {
-                grid-template-columns: 1fr; /* 버튼 세로 배치 */
-            }
-
-            .help-section {
-                padding: 20px;
-            }
-
-            .help-section h3 {
-                font-size: 28px;
-            }
-
-            .help-section ol {
-                font-size: 22px;
-                margin-left: 15px;
-            }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 36px; }
+            .pc-name { font-size: 26px; }
+            .pc-info { font-size: 18px; }
+            button { font-size: 22px; min-width: 120px; padding: 15px; }
+            .add-pc-btn { font-size: 24px; }
+            .refresh-all-btn { font-size: 22px; }
+            .modal h2 { font-size: 32px; }
+            label { font-size: 26px; }
+            input { font-size: 28px; padding: 15px; }
+            .help-text { font-size: 16px; }
+            .button-group { flex-direction: column; }
+            button { width: 100%; height: 60px; }
+            .status-light { width: 25px; height: 25px; }
+            .status-text { font-size: 20px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>좋은날금박 원격 PC부팅</h1>
-            <p>Wake on LAN</p>
-        </div>
-
-        <button class="add-pc-btn" onclick="showAddPCModal()">+ PC 추가하기</button>
-
-        <div class="pc-list" id="pcList">
-            <!-- PC 카드들이 여기 표시됨 -->
-        </div>
-
-        <div class="log-area" id="logArea" style="display: none;">
-            <strong>작업 로그:</strong>
-            <div id="logContent"></div>
-        </div>
-
-        <div class="help-section">
-            <h3>📋 설정 방법</h3>
-            <ol>
-                <li><strong>MAC 주소 확인:</strong> 사무실 PC에서 <code>ipconfig /all</code> 실행 → "물리적 주소" 복사</li>
-                <li><strong>공유기 설정:</strong> 포트포워딩 UDP 9번 → PC IP로 설정</li>
-                <li><strong>BIOS 설정:</strong> Wake on LAN 활성화</li>
-                <li><strong>외부 IP:</strong> 공유기 관리페이지에서 확인 또는 DDNS 주소 사용</li>
-            </ol>
-        </div>
+        <h1>🌟 좋은날금박 원격 PC 부팅</h1>
+        
+        <button class="add-pc-btn" onclick="showAddModal()">+ PC 추가하기</button>
+        <button class="refresh-all-btn" onclick="checkAllPCs()">🔄 전체 상태 확인</button>
+        
+        <div id="pcList" class="pc-list"></div>
+        
+        <div class="log" id="log"></div>
     </div>
-
-    <!-- PC 추가/수정 모달 -->
-    <div class="modal" id="pcModal">
+    
+    <div id="addModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header" id="modalTitle">PC 추가</div>
-            <form id="pcForm" onsubmit="savePCConfig(event)">
-                <div class="form-group">
-                    <label>PC 이름</label>
-                    <input type="text" id="pcName" placeholder="예: 사무실 메인 PC" required>
-                </div>
-
-                <div class="form-group">
-                    <label>MAC 주소</label>
-                    <input type="text" id="macAddress" placeholder="AA:BB:CC:DD:EE:FF 또는 AA-BB-CC-DD-EE-FF" required>
-                    <small>사무실 PC에서 ipconfig /all 로 확인 가능</small>
-                </div>
-
-                <div class="form-group">
-                    <label>외부 IP 또는 DDNS</label>
-                    <input type="text" id="ipAddress" placeholder="예: 123.456.78.90 또는 myoffice.ddns.net" required>
-                    <small>공유기 외부 IP 또는 DDNS 주소</small>
-                </div>
-
-                <div class="form-group">
-                    <label>WOL 포트</label>
-                    <input type="number" id="wolPort" value="9" required>
-                    <small>기본값: 9 (공유기 포트포워딩 설정 필요)</small>
-                </div>
-
-                <div class="form-group">
-                    <label>원격 데스크톱 포트 (선택)</label>
-                    <input type="number" id="rdpPort" placeholder="3389">
-                    <small>원격 데스크톱 사용시 포트 번호</small>
-                </div>
-
-                <input type="hidden" id="editIndex" value="">
-
-                <div class="modal-buttons">
-                    <button type="submit" class="btn-save">저&nbsp;&nbsp;&nbsp;장</button>
-                    <button type="button" class="btn-cancel" onclick="closeModal()">취&nbsp;&nbsp;&nbsp;소</button>
-                </div>
-            </form>
+            <h2>PC 추가</h2>
+            <div class="form-group">
+                <label>PC 이름</label>
+                <input type="text" id="pcName" placeholder="예: 사무실 메인 PC">
+            </div>
+            <div class="form-group">
+                <label>MAC 주소</label>
+                <input type="text" id="macAddress" placeholder="예: 40-8D-5C-17-C4-AA">
+                <div class="help-text">하이픈(-) 또는 콜론(:) 포함</div>
+            </div>
+            <div class="form-group">
+                <label>외부 IP 주소</label>
+                <input type="text" id="ipAddress" placeholder="예: 123.45.67.89">
+                <div class="help-text">whatismyip.com에서 확인</div>
+            </div>
+            <div class="form-group">
+                <label>WOL 포트</label>
+                <input type="number" id="wolPort" value="9">
+                <div class="help-text">기본값: 9</div>
+            </div>
+            <div class="form-group">
+                <label>원격 데스크톱 포트</label>
+                <input type="number" id="rdpPort" value="3389">
+                <div class="help-text">기본값: 3389</div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-save" onclick="savePC()">저장</button>
+                <button class="btn-cancel" onclick="closeModal()">취소</button>
+            </div>
         </div>
     </div>
-
+    
     <script>
-        // PC 설정 저장 (localStorage)
-        let pcConfigs = JSON.parse(localStorage.getItem('wolPCConfigs') || '[]');
-
-        // 페이지 로드시 PC 목록 표시
-        window.onload = function() {
-            renderPCList();
-        };
-
-        function renderPCList() {
-            const pcList = document.getElementById('pcList');
+        let pcs = JSON.parse(localStorage.getItem('pcs') || '[]');
+        let pcStatus = JSON.parse(localStorage.getItem('pcStatus') || '{}');
+        let editingIndex = -1;
+        
+        function renderPCs() {
+            const list = document.getElementById('pcList');
+            list.innerHTML = '';
             
-            if (pcConfigs.length === 0) {
-                pcList.innerHTML = '<div style="text-align: center; padding: 40px; color: rgba(0, 0, 0, 0.8);">등록된 PC가 없습니다.<br>위 버튼을 눌러 PC를 추가하세요.</div>';
+            pcs.forEach((pc, index) => {
+                const status = pcStatus[pc.ip] || { online: false, lastCheck: null };
+                const statusClass = status.checking ? 'checking' : (status.online ? 'online' : 'offline');
+                const statusText = status.checking ? '확인 중...' : (status.online ? '🟢 켜짐' : '🔴 꺼짐');
+                const lastCheckText = status.lastCheck ? `마지막 확인: ${new Date(status.lastCheck).toLocaleTimeString('ko-KR')}` : '아직 확인 안 함';
+                
+                const item = document.createElement('div');
+                item.className = 'pc-item';
+                item.id = `pc-${index}`;
+                item.innerHTML = `
+                    <div class="pc-header">
+                        <div class="status-light ${statusClass}"></div>
+                        <div class="pc-name">${pc.name}</div>
+                        <span class="status-text ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="pc-info">MAC: ${pc.mac}</div>
+                    <div class="pc-info">IP: ${pc.ip}:${pc.wolPort}</div>
+                    <div class="last-check">${lastCheckText}</div>
+                    <div class="button-group">
+                        <button class="btn-wake" onclick="wakePC(${index})">⚡ PC 켜기</button>
+                        <button class="btn-check" onclick="checkPC(${index})">🔍 상태 확인</button>
+                        <button class="btn-rdp" onclick="connectRDP(${index})">🖥️ 원격 접속</button>
+                        <button class="btn-edit" onclick="editPC(${index})">✏️ 수정</button>
+                        <button class="btn-delete" onclick="deletePC(${index})">🗑️ 삭제</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+        
+        function showAddModal() {
+            editingIndex = -1;
+            document.getElementById('pcName').value = '';
+            document.getElementById('macAddress').value = '';
+            document.getElementById('ipAddress').value = '';
+            document.getElementById('wolPort').value = '9';
+            document.getElementById('rdpPort').value = '3389';
+            document.getElementById('addModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('addModal').style.display = 'none';
+        }
+        
+        function savePC() {
+            const pc = {
+                name: document.getElementById('pcName').value,
+                mac: document.getElementById('macAddress').value,
+                ip: document.getElementById('ipAddress').value,
+                wolPort: document.getElementById('wolPort').value,
+                rdpPort: document.getElementById('rdpPort').value
+            };
+            
+            if (!pc.name || !pc.mac || !pc.ip) {
+                alert('모든 필수 항목을 입력하세요');
                 return;
             }
-
-            pcList.innerHTML = pcConfigs.map((pc, index) => `
-                <div class="pc-card" id="pc-${index}">
-                    <div class="pc-name">${pc.name}</div>
-                    <div class="pc-info">
-                        MAC: ${pc.mac}<br>
-                        IP: ${pc.ip}:${pc.port}
-                    </div>
-                    <div class="pc-status status-unknown" id="status-${index}">상태 확인 필요</div>
-                    <div class="button-group">
-                        <button class="btn-wake" onclick="wakePC(${index})">🚀 PC 켜기</button>
-                        ${pc.rdpPort ? `<button class="btn-rdp" onclick="openRDP(${index})">💻 원격 접속</button>` : ''}
-                        <button class="btn-edit" onclick="editPC(${index})">✏️ 수정</button>
-                    </div>
-                </div>
-            `).join('');
+            
+            if (editingIndex >= 0) {
+                pcs[editingIndex] = pc;
+            } else {
+                pcs.push(pc);
+            }
+            
+            localStorage.setItem('pcs', JSON.stringify(pcs));
+            renderPCs();
+            closeModal();
+            addLog(`PC ${editingIndex >= 0 ? '수정' : '추가'} 완료: ${pc.name}`);
         }
-
-        function showAddPCModal() {
-            document.getElementById('modalTitle').textContent = 'PC 추가';
-            document.getElementById('pcForm').reset();
-            document.getElementById('editIndex').value = '';
-            document.getElementById('wolPort').value = '9';
-            document.getElementById('pcModal').classList.add('show');
-        }
-
+        
         function editPC(index) {
-            const pc = pcConfigs[index];
-            document.getElementById('modalTitle').textContent = 'PC 수정';
+            editingIndex = index;
+            const pc = pcs[index];
             document.getElementById('pcName').value = pc.name;
             document.getElementById('macAddress').value = pc.mac;
             document.getElementById('ipAddress').value = pc.ip;
-            document.getElementById('wolPort').value = pc.port;
-            document.getElementById('rdpPort').value = pc.rdpPort || '';
-            document.getElementById('editIndex').value = index;
-            document.getElementById('pcModal').classList.add('show');
+            document.getElementById('wolPort').value = pc.wolPort;
+            document.getElementById('rdpPort').value = pc.rdpPort;
+            document.getElementById('addModal').style.display = 'block';
         }
-
-        function closeModal() {
-            document.getElementById('pcModal').classList.remove('show');
-        }
-
-        function savePCConfig(event) {
-            event.preventDefault();
-            
-            const config = {
-                name: document.getElementById('pcName').value,
-                mac: document.getElementById('macAddress').value.replace(/[-:]/g, ':'),
-                ip: document.getElementById('ipAddress').value,
-                port: document.getElementById('wolPort').value,
-                rdpPort: document.getElementById('rdpPort').value
-            };
-
-            const editIndex = document.getElementById('editIndex').value;
-            
-            if (editIndex === '') {
-                pcConfigs.push(config);
-                addLog('success', `PC "${config.name}" 추가됨`);
-            } else {
-                pcConfigs[editIndex] = config;
-                addLog('success', `PC "${config.name}" 수정됨`);
-            }
-
-            localStorage.setItem('wolPCConfigs', JSON.stringify(pcConfigs));
-            renderPCList();
-            closeModal();
-        }
-
-        async function wakePC(index) {
-            const pc = pcConfigs[index];
-            const statusEl = document.getElementById(`status-${index}`);
-            
-            addLog('info', `"${pc.name}" 부팅 신호 전송 중...`);
-            statusEl.textContent = '부팅 중...';
-            statusEl.className = 'pc-status status-booting';
-
-            try {
-                // WOL 매직 패킷 전송
-                const success = await sendWOLPacket(pc.mac, pc.ip, pc.port);
-                
-                if (success) {
-                    addLog('success', `"${pc.name}" 부팅 신호 전송 완료!`);
-                    statusEl.textContent = '부팅 신호 전송됨 ✓';
-                    statusEl.className = 'pc-status status-on';
-                    
-                    // 30초 후 상태 리셋
-                    setTimeout(() => {
-                        statusEl.textContent = '상태 확인 필요';
-                        statusEl.className = 'pc-status status-unknown';
-                    }, 30000);
-                } else {
-                    throw new Error('전송 실패');
-                }
-            } catch (error) {
-                addLog('error', `"${pc.name}" 부팅 실패: ${error.message}`);
-                statusEl.textContent = '전송 실패';
-                statusEl.className = 'pc-status status-unknown';
+        
+        function deletePC(index) {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                const pc = pcs[index];
+                delete pcStatus[pc.ip];
+                localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
+                pcs.splice(index, 1);
+                localStorage.setItem('pcs', JSON.stringify(pcs));
+                renderPCs();
+                addLog(`PC 삭제 완료: ${pc.name}`);
             }
         }
-
-        async function sendWOLPacket(mac, ip, port) {
+        
+        async function checkPC(index) {
+            const pc = pcs[index];
+            addLog(`🔍 상태 확인 중: ${pc.name}...`);
+            
+            pcStatus[pc.ip] = { ...pcStatus[pc.ip], checking: true };
+            localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
+            renderPCs();
+            
             try {
-                // Python 서버 API 호출
-                const serverUrl = window.location.origin; // 현재 서버 주소
-                
-                const response = await fetch(`${serverUrl}/api/wake`, {
+                const response = await fetch('/check', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        mac: mac,
-                        ip: ip,
-                        port: port
+                        ip: pc.ip,
+                        port: pc.rdpPort
                     })
                 });
-
-                const data = await response.json();
                 
-                if (data.success) {
-                    addLog('success', `매직 패킷 전송 완료!`);
-                    addLog('info', `대상: ${ip}:${port}, MAC: ${mac}`);
-                    return true;
+                const result = await response.json();
+                pcStatus[pc.ip] = {
+                    online: result.online,
+                    lastCheck: new Date().toISOString(),
+                    checking: false
+                };
+                localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
+                renderPCs();
+                
+                if (result.online) {
+                    addLog(`🟢 ${pc.name}: 켜져 있음! ✅`);
                 } else {
-                    throw new Error(data.message || '전송 실패');
+                    addLog(`🔴 ${pc.name}: 꺼져 있음`);
                 }
-                
             } catch (error) {
-                addLog('error', `서버 연결 실패: ${error.message}`);
-                addLog('info', '서버가 실행 중인지 확인하세요');
-                return false;
+                pcStatus[pc.ip] = {
+                    online: false,
+                    lastCheck: new Date().toISOString(),
+                    checking: false
+                };
+                localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
+                renderPCs();
+                addLog(`🔴 ${pc.name}: 응답 없음 (꺼져 있음)`);
             }
         }
-
-        function openRDP(index) {
-            const pc = pcConfigs[index];
-            const rdpUrl = `mstsc.exe /v:${pc.ip}:${pc.rdpPort}`;
-            
-            addLog('info', `원격 데스크톱 연결: ${pc.name}`);
-            alert(`원격 데스크톱 연결:\n\nWindows 실행(Win+R)에서 입력:\nmstsc /v:${pc.ip}:${pc.rdpPort}`);
+        
+        async function checkAllPCs() {
+            addLog('🔄 전체 PC 상태 확인 시작...');
+            for (let i = 0; i < pcs.length; i++) {
+                await checkPC(i);
+                if (i < pcs.length - 1) {
+                    await new Promise(r => setTimeout(r, 500));
+                }
+            }
+            addLog('✅ 전체 상태 확인 완료!');
         }
-
-        function addLog(type, message) {
-            const logArea = document.getElementById('logArea');
-            const logContent = document.getElementById('logContent');
+        
+        async function wakePC(index) {
+            const pc = pcs[index];
+            addLog(`⚡ WOL 신호 전송 중: ${pc.name}...`);
             
-            logArea.style.display = 'block';
-            
+            try {
+                const response = await fetch('/wake', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        mac: pc.mac,
+                        ip: pc.ip,
+                        port: pc.wolPort
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    addLog(`✅ WOL 신호 전송 완료: ${pc.name}`);
+                    addLog('⏳ PC 부팅 대기 중... (약 2분 후 상태 확인)');
+                    
+                    // 2분 후 자동 상태 확인
+                    setTimeout(() => {
+                        addLog(`🔍 ${pc.name} 자동 상태 확인...`);
+                        checkPC(index);
+                    }, 120000);
+                } else {
+                    addLog(`❌ 오류: ${result.message}`);
+                }
+            } catch (error) {
+                addLog(`❌ 전송 실패: ${error.message}`);
+            }
+        }
+        
+        function connectRDP(index) {
+            const pc = pcs[index];
+            const rdpUrl = `rdp://full%20address=s:${pc.ip}:${pc.rdpPort}`;
+            window.location.href = rdpUrl;
+            addLog(`🖥️ 원격 데스크톱 연결 시도: ${pc.name}`);
+        }
+        
+        function addLog(message) {
+            const log = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
             const time = new Date().toLocaleTimeString('ko-KR');
-            const logEntry = document.createElement('div');
-            logEntry.className = 'log-entry';
-            logEntry.innerHTML = `<span class="log-time">[${time}]</span><span class="log-${type}">${message}</span>`;
+            entry.textContent = `[${time}] ${message}`;
+            log.insertBefore(entry, log.firstChild);
             
-            logContent.insertBefore(logEntry, logContent.firstChild);
-            
-            // 최대 50개 로그만 유지
-            while (logContent.children.length > 50) {
-                logContent.removeChild(logContent.lastChild);
+            while (log.children.length > 50) {
+                log.removeChild(log.lastChild);
             }
+        }
+        
+        // 초기 렌더링
+        renderPCs();
+        addLog('🌟 좋은날금박 WOL 시스템 시작');
+        
+        // 페이지 로드 시 자동 상태 확인
+        if (pcs.length > 0) {
+            setTimeout(checkAllPCs, 1000);
         }
     </script>
 </body>
