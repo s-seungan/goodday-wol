@@ -53,37 +53,43 @@
             align-items: center;
             gap: 15px;
             margin-bottom: 15px;
+            flex-wrap: wrap;
         }
         
         .status-light {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             border: 3px solid #333;
             flex-shrink: 0;
-            position: relative;
         }
         
         .status-light.online {
             background: radial-gradient(circle at 30% 30%, #7fff7f, #00cc00);
-            box-shadow: 0 0 15px #00cc00, 0 0 30px #00cc00;
+            box-shadow: 0 0 20px #00cc00, 0 0 40px #00cc00;
             animation: pulse-green 1.5s infinite;
         }
         
         .status-light.offline {
             background: radial-gradient(circle at 30% 30%, #ff7f7f, #cc0000);
-            box-shadow: 0 0 10px #cc0000;
+            box-shadow: 0 0 15px #cc0000;
         }
         
         .status-light.checking {
             background: radial-gradient(circle at 30% 30%, #ffff7f, #cccc00);
-            box-shadow: 0 0 10px #cccc00;
+            box-shadow: 0 0 15px #cccc00;
             animation: pulse-yellow 0.8s infinite;
         }
         
+        .status-light.booting {
+            background: radial-gradient(circle at 30% 30%, #7fbfff, #0080ff);
+            box-shadow: 0 0 15px #0080ff;
+            animation: pulse-blue 0.5s infinite;
+        }
+        
         @keyframes pulse-green {
-            0%, 100% { box-shadow: 0 0 15px #00cc00, 0 0 30px #00cc00; }
-            50% { box-shadow: 0 0 25px #00ff00, 0 0 50px #00ff00; }
+            0%, 100% { box-shadow: 0 0 20px #00cc00, 0 0 40px #00cc00; }
+            50% { box-shadow: 0 0 30px #00ff00, 0 0 60px #00ff00; }
         }
         
         @keyframes pulse-yellow {
@@ -91,11 +97,16 @@
             50% { opacity: 0.5; }
         }
         
+        @keyframes pulse-blue {
+            0%, 100% { box-shadow: 0 0 15px #0080ff; }
+            50% { box-shadow: 0 0 30px #00bfff, 0 0 50px #00bfff; }
+        }
+        
         .status-text {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
-            padding: 5px 15px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 25px;
         }
         
         .status-text.online {
@@ -113,6 +124,11 @@
             color: #856404;
         }
         
+        .status-text.booting {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
         .pc-name {
             font-size: 32px;
             font-weight: bold;
@@ -126,6 +142,48 @@
             line-height: 1.6;
         }
         
+        /* 진행 막대 */
+        .progress-container {
+            display: none;
+            margin: 20px 0;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 40px;
+            position: relative;
+        }
+        
+        .progress-container.active {
+            display: block;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #707f7a, #27ae60);
+            border-radius: 15px;
+            transition: width 1s linear;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            line-height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .progress-time {
+            text-align: center;
+            font-size: 24px;
+            color: #666;
+            margin-top: 10px;
+        }
+        
         .button-group {
             display: flex;
             gap: 15px;
@@ -135,9 +193,9 @@
         
         button {
             flex: 1;
-            min-width: 150px;
+            min-width: 140px;
             padding: 20px;
-            font-size: 26px;
+            font-size: 24px;
             font-weight: bold;
             border: none;
             border-radius: 12px;
@@ -153,6 +211,12 @@
         .btn-wake:hover {
             background: #5a6a65;
             transform: translateY(-2px);
+        }
+        
+        .btn-wake:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+            transform: none;
         }
         
         .btn-check {
@@ -309,15 +373,15 @@
             color: #ecf0f1;
             padding: 20px;
             border-radius: 10px;
-            max-height: 300px;
+            max-height: 250px;
             overflow-y: auto;
             font-family: 'Consolas', monospace;
-            font-size: 20px;
+            font-size: 18px;
         }
         
         .log-entry {
-            margin-bottom: 10px;
-            padding: 8px;
+            margin-bottom: 8px;
+            padding: 6px;
             border-left: 4px solid #707f7a;
             background: rgba(255,255,255,0.05);
         }
@@ -329,26 +393,28 @@
         }
         
         @media (max-width: 768px) {
-            h1 { font-size: 36px; }
-            .pc-name { font-size: 26px; }
-            .pc-info { font-size: 18px; }
-            button { font-size: 22px; min-width: 120px; padding: 15px; }
-            .add-pc-btn { font-size: 24px; }
-            .refresh-all-btn { font-size: 22px; }
-            .modal h2 { font-size: 32px; }
-            label { font-size: 26px; }
-            input { font-size: 28px; padding: 15px; }
-            .help-text { font-size: 16px; }
+            h1 { font-size: 32px; }
+            .pc-name { font-size: 24px; }
+            .pc-info { font-size: 16px; }
+            button { font-size: 20px; min-width: 100px; padding: 15px; }
+            .add-pc-btn { font-size: 22px; padding: 20px; }
+            .refresh-all-btn { font-size: 20px; padding: 15px; }
+            .modal h2 { font-size: 28px; }
+            label { font-size: 24px; }
+            input { font-size: 24px; padding: 12px; }
+            .help-text { font-size: 14px; }
             .button-group { flex-direction: column; }
-            button { width: 100%; height: 60px; }
-            .status-light { width: 25px; height: 25px; }
-            .status-text { font-size: 20px; }
+            button { width: 100%; height: 55px; }
+            .status-light { width: 35px; height: 35px; }
+            .status-text { font-size: 22px; padding: 6px 15px; }
+            .progress-container { height: 35px; }
+            .progress-text { line-height: 35px; font-size: 16px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🌟 좋은날금박 원격 PC 부팅</h1>
+        <h1>🌟 좋은날금박 원격 PC</h1>
         
         <button class="add-pc-btn" onclick="showAddModal()">+ PC 추가하기</button>
         <button class="refresh-all-btn" onclick="checkAllPCs()">🔄 전체 상태 확인</button>
@@ -396,16 +462,37 @@
         let pcs = JSON.parse(localStorage.getItem('pcs') || '[]');
         let pcStatus = JSON.parse(localStorage.getItem('pcStatus') || '{}');
         let editingIndex = -1;
+        let bootingTimers = {};
         
         function renderPCs() {
             const list = document.getElementById('pcList');
             list.innerHTML = '';
             
             pcs.forEach((pc, index) => {
-                const status = pcStatus[pc.ip] || { online: false, lastCheck: null };
-                const statusClass = status.checking ? 'checking' : (status.online ? 'online' : 'offline');
-                const statusText = status.checking ? '확인 중...' : (status.online ? '🟢 켜짐' : '🔴 꺼짐');
-                const lastCheckText = status.lastCheck ? `마지막 확인: ${new Date(status.lastCheck).toLocaleTimeString('ko-KR')}` : '아직 확인 안 함';
+                const status = pcStatus[pc.ip] || { online: false, lastCheck: null, booting: false };
+                let statusClass, statusText;
+                
+                if (status.booting) {
+                    statusClass = 'booting';
+                    statusText = '🔵 부팅 중...';
+                } else if (status.checking) {
+                    statusClass = 'checking';
+                    statusText = '🟡 확인 중...';
+                } else if (status.online) {
+                    statusClass = 'online';
+                    statusText = '🟢 켜짐';
+                } else {
+                    statusClass = 'offline';
+                    statusText = '🔴 꺼짐';
+                }
+                
+                const lastCheckText = status.lastCheck ? 
+                    `마지막 확인: ${new Date(status.lastCheck).toLocaleTimeString('ko-KR')}` : 
+                    '아직 확인 안 함';
+                
+                const isBooting = status.booting;
+                const progressPercent = status.bootProgress || 0;
+                const remainingTime = status.remainingTime || 0;
                 
                 const item = document.createElement('div');
                 item.className = 'pc-item';
@@ -419,12 +506,23 @@
                     <div class="pc-info">MAC: ${pc.mac}</div>
                     <div class="pc-info">IP: ${pc.ip}:${pc.wolPort}</div>
                     <div class="last-check">${lastCheckText}</div>
+                    
+                    <div class="progress-container ${isBooting ? 'active' : ''}" id="progress-${index}">
+                        <div class="progress-bar" style="width: ${progressPercent}%"></div>
+                        <div class="progress-text">부팅 중... ${progressPercent}%</div>
+                    </div>
+                    <div class="progress-time" id="time-${index}" style="display: ${isBooting ? 'block' : 'none'}">
+                        ⏱️ 남은 시간: ${Math.floor(remainingTime / 60)}분 ${remainingTime % 60}초
+                    </div>
+                    
                     <div class="button-group">
-                        <button class="btn-wake" onclick="wakePC(${index})">⚡ PC 켜기</button>
-                        <button class="btn-check" onclick="checkPC(${index})">🔍 상태 확인</button>
-                        <button class="btn-rdp" onclick="connectRDP(${index})">🖥️ 원격 접속</button>
-                        <button class="btn-edit" onclick="editPC(${index})">✏️ 수정</button>
-                        <button class="btn-delete" onclick="deletePC(${index})">🗑️ 삭제</button>
+                        <button class="btn-wake" onclick="wakePC(${index})" ${isBooting ? 'disabled' : ''}>
+                            ⚡ PC 켜기
+                        </button>
+                        <button class="btn-check" onclick="checkPC(${index})">🔍 상태</button>
+                        <button class="btn-rdp" onclick="connectRDP(${index})">🖥️ 원격</button>
+                        <button class="btn-edit" onclick="editPC(${index})">✏️</button>
+                        <button class="btn-delete" onclick="deletePC(${index})">🗑️</button>
                     </div>
                 `;
                 list.appendChild(item);
@@ -468,7 +566,7 @@
             localStorage.setItem('pcs', JSON.stringify(pcs));
             renderPCs();
             closeModal();
-            addLog(`PC ${editingIndex >= 0 ? '수정' : '추가'} 완료: ${pc.name}`);
+            addLog(`✅ PC ${editingIndex >= 0 ? '수정' : '추가'} 완료: ${pc.name}`);
         }
         
         function editPC(index) {
@@ -485,12 +583,16 @@
         function deletePC(index) {
             if (confirm('정말 삭제하시겠습니까?')) {
                 const pc = pcs[index];
+                if (bootingTimers[index]) {
+                    clearInterval(bootingTimers[index]);
+                    delete bootingTimers[index];
+                }
                 delete pcStatus[pc.ip];
                 localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
                 pcs.splice(index, 1);
                 localStorage.setItem('pcs', JSON.stringify(pcs));
                 renderPCs();
-                addLog(`PC 삭제 완료: ${pc.name}`);
+                addLog(`🗑️ PC 삭제 완료: ${pc.name}`);
             }
         }
         
@@ -498,7 +600,11 @@
             const pc = pcs[index];
             addLog(`🔍 상태 확인 중: ${pc.name}...`);
             
-            pcStatus[pc.ip] = { ...pcStatus[pc.ip], checking: true };
+            pcStatus[pc.ip] = { ...pcStatus[pc.ip], checking: true, booting: false };
+            if (bootingTimers[index]) {
+                clearInterval(bootingTimers[index]);
+                delete bootingTimers[index];
+            }
             localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
             renderPCs();
             
@@ -516,7 +622,8 @@
                 pcStatus[pc.ip] = {
                     online: result.online,
                     lastCheck: new Date().toISOString(),
-                    checking: false
+                    checking: false,
+                    booting: false
                 };
                 localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
                 renderPCs();
@@ -530,11 +637,12 @@
                 pcStatus[pc.ip] = {
                     online: false,
                     lastCheck: new Date().toISOString(),
-                    checking: false
+                    checking: false,
+                    booting: false
                 };
                 localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
                 renderPCs();
-                addLog(`🔴 ${pc.name}: 응답 없음 (꺼져 있음)`);
+                addLog(`🔴 ${pc.name}: 응답 없음`);
             }
         }
         
@@ -567,13 +675,10 @@
                 const result = await response.json();
                 if (result.success) {
                     addLog(`✅ WOL 신호 전송 완료: ${pc.name}`);
-                    addLog('⏳ PC 부팅 대기 중... (약 2분 후 상태 확인)');
+                    addLog('⏳ PC 부팅 대기 중... (2분)');
                     
-                    // 2분 후 자동 상태 확인
-                    setTimeout(() => {
-                        addLog(`🔍 ${pc.name} 자동 상태 확인...`);
-                        checkPC(index);
-                    }, 120000);
+                    // 부팅 진행 막대 시작
+                    startBootProgress(index, pc);
                 } else {
                     addLog(`❌ 오류: ${result.message}`);
                 }
@@ -582,11 +687,60 @@
             }
         }
         
+        function startBootProgress(index, pc) {
+            const totalTime = 120; // 2분 = 120초
+            let elapsed = 0;
+            
+            pcStatus[pc.ip] = {
+                ...pcStatus[pc.ip],
+                booting: true,
+                bootProgress: 0,
+                remainingTime: totalTime
+            };
+            localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
+            renderPCs();
+            
+            // 기존 타이머 정리
+            if (bootingTimers[index]) {
+                clearInterval(bootingTimers[index]);
+            }
+            
+            bootingTimers[index] = setInterval(() => {
+                elapsed++;
+                const progress = Math.min(Math.round((elapsed / totalTime) * 100), 100);
+                const remaining = totalTime - elapsed;
+                
+                pcStatus[pc.ip] = {
+                    ...pcStatus[pc.ip],
+                    bootProgress: progress,
+                    remainingTime: remaining
+                };
+                localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
+                
+                // UI 업데이트
+                const progressBar = document.querySelector(`#progress-${index} .progress-bar`);
+                const progressText = document.querySelector(`#progress-${index} .progress-text`);
+                const timeText = document.getElementById(`time-${index}`);
+                
+                if (progressBar) progressBar.style.width = `${progress}%`;
+                if (progressText) progressText.textContent = `부팅 중... ${progress}%`;
+                if (timeText) timeText.textContent = `⏱️ 남은 시간: ${Math.floor(remaining / 60)}분 ${remaining % 60}초`;
+                
+                // 2분 완료
+                if (elapsed >= totalTime) {
+                    clearInterval(bootingTimers[index]);
+                    delete bootingTimers[index];
+                    addLog(`🔍 ${pc.name} 자동 상태 확인...`);
+                    checkPC(index);
+                }
+            }, 1000);
+        }
+        
         function connectRDP(index) {
             const pc = pcs[index];
             const rdpUrl = `rdp://full%20address=s:${pc.ip}:${pc.rdpPort}`;
             window.location.href = rdpUrl;
-            addLog(`🖥️ 원격 데스크톱 연결 시도: ${pc.name}`);
+            addLog(`🖥️ 원격 데스크톱 연결: ${pc.name}`);
         }
         
         function addLog(message) {
@@ -597,7 +751,7 @@
             entry.textContent = `[${time}] ${message}`;
             log.insertBefore(entry, log.firstChild);
             
-            while (log.children.length > 50) {
+            while (log.children.length > 30) {
                 log.removeChild(log.lastChild);
             }
         }
