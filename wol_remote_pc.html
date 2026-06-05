@@ -12,55 +12,90 @@
         }
         
         body {
-            font-family: 'Malgun Gothic', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background-color: #707f7a;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background-color: rgba(200, 222, 186, 0.98);
+            border: 8px solid #294731;
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
         }
         
         h1 {
             text-align: center;
-            color: #707f7a;
-            margin-bottom: 30px;
-            font-size: 48px;
+            color: #294731;
+            margin-bottom: 8px;
+            font-size: 37px;
             font-weight: bold;
         }
         
+        /* 상단 버튼 가로 배열 */
+        .top-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .top-buttons button {
+            flex: 1;
+            padding: 12px;
+            font-size: 25px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .add-pc-btn {
+            background: #5A8348;
+            color: white;
+        }
+        
+        .add-pc-btn:hover {
+            background: #6b9b57;
+        }
+        
+        .refresh-all-btn {
+            background: #478358;
+            color: white;
+        }
+        
+        .refresh-all-btn:hover {
+            background: #4a7340;
+        }
+        
         .pc-list {
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
         
         .pc-item {
-            background: #f8f9fa;
-            border: 3px solid #707f7a;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            position: relative;
+            background: #fff;
+            border: 3px solid #478358;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 8px;
         }
         
         .pc-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 8px;
             flex-wrap: wrap;
         }
         
         .status-light {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
-            border: 3px solid #333;
+            border: 3px solid #294731;
             flex-shrink: 0;
         }
         
@@ -103,10 +138,10 @@
         }
         
         .status-text {
-            font-size: 28px;
+            font-size: 18px;
             font-weight: bold;
-            padding: 8px 20px;
-            border-radius: 25px;
+            padding: 5px 12px;
+            border-radius: 15px;
         }
         
         .status-text.online {
@@ -130,26 +165,27 @@
         }
         
         .pc-name {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: bold;
-            color: #2c3e50;
+            color: #294731;
         }
         
         .pc-info {
-            font-size: 22px;
-            color: #666;
-            margin-bottom: 10px;
-            line-height: 1.6;
+            font-size: 16px;
+            color: #478358;
+            margin-bottom: 5px;
+            line-height: 1.4;
         }
         
         /* 진행 막대 */
         .progress-container {
             display: none;
-            margin: 20px 0;
+            margin: 12px 0;
             background: #e9ecef;
-            border-radius: 15px;
+            border: 2px solid #478358;
+            border-radius: 10px;
             overflow: hidden;
-            height: 40px;
+            height: 30px;
             position: relative;
         }
         
@@ -159,87 +195,85 @@
         
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #707f7a, #27ae60);
-            border-radius: 15px;
+            background: linear-gradient(90deg, #5A8348, #6b9b57);
+            border-radius: 8px;
             transition: width 1s linear;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
         .progress-text {
             position: absolute;
             width: 100%;
             text-align: center;
-            line-height: 40px;
-            font-size: 20px;
+            line-height: 30px;
+            font-size: 14px;
             font-weight: bold;
-            color: #333;
+            color: #294731;
         }
         
         .progress-time {
             text-align: center;
-            font-size: 24px;
-            color: #666;
-            margin-top: 10px;
+            font-size: 16px;
+            color: #294731;
+            margin-top: 5px;
+            font-weight: bold;
         }
         
         .button-group {
             display: flex;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 12px;
             flex-wrap: wrap;
         }
         
-        button {
+        .button-group button {
+            font-size: 18px;
             flex: 1;
-            min-width: 140px;
-            padding: 20px;
-            font-size: 24px;
+            min-width: 80px;
+            padding: 12px;
+            font-size: 18px;
             font-weight: bold;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
         }
         
         .btn-wake {
-            background: #707f7a;
+            background: #5A8348;
             color: white;
         }
         
         .btn-wake:hover {
-            background: #5a6a65;
-            transform: translateY(-2px);
+            background: #6b9b57;
         }
         
         .btn-wake:disabled {
             background: #aaa;
             cursor: not-allowed;
-            transform: none;
         }
         
         .btn-check {
-            background: #17a2b8;
+            background: #478358;
             color: white;
         }
         
         .btn-check:hover {
-            background: #138496;
+            background: #4a7340;
         }
         
         .btn-rdp {
-            background: #3498db;
+            background: #294731;
             color: white;
         }
         
         .btn-rdp:hover {
-            background: #2980b9;
+            background: #1e3525;
         }
         
         .btn-edit {
             background: #f39c12;
             color: white;
+            max-width: 55px;
         }
         
         .btn-edit:hover {
@@ -249,42 +283,32 @@
         .btn-delete {
             background: #e74c3c;
             color: white;
+            max-width: 55px;
         }
         
         .btn-delete:hover {
             background: #c0392b;
         }
         
-        .add-pc-btn {
-            width: 100%;
-            padding: 25px;
-            background: #27ae60;
-            color: white;
-            font-size: 28px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 20px;
+        /* 개별 PC 로그창 */
+        .pc-log {
+            background: #294731;
+            color: #ecf0f1;
+            padding: 10px;
+            border-radius: 8px;
+            max-height: 120px;
+            overflow-y: auto;
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            font-size: 14px;
+            margin-top: 12px;
+            border: 2px solid #478358;
         }
         
-        .add-pc-btn:hover {
-            background: #229954;
-        }
-        
-        .refresh-all-btn {
-            width: 100%;
-            padding: 20px;
-            background: #17a2b8;
-            color: white;
-            font-size: 26px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        
-        .refresh-all-btn:hover {
-            background: #138496;
+        .pc-log-entry {
+            margin-bottom: 4px;
+            padding: 3px 6px;
+            border-left: 3px solid #6b9b57;
+            background: rgba(255,255,255,0.05);
         }
         
         .modal {
@@ -299,116 +323,103 @@
         }
         
         .modal-content {
-            background: white;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 40px;
+            background: rgba(200, 222, 186, 0.98);
+            border: 5px solid #294731;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 25px;
             border-radius: 20px;
             max-height: 90vh;
             overflow-y: auto;
         }
         
         .modal h2 {
-            font-size: 36px;
-            color: #707f7a;
-            margin-bottom: 30px;
+            font-size: 28px;
+            color: #294731;
+            margin-bottom: 20px;
         }
         
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 8px;
         }
         
         label {
             display: block;
-            font-size: 30px;
+            font-size: 22px;
             font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
+            color: #294731;
+            margin-bottom: 6px;
         }
         
         input {
             width: 100%;
-            padding: 18px;
-            font-size: 32px;
-            border: 3px solid #ddd;
-            border-radius: 10px;
+            padding: 12px;
+            font-size: 24px;
+            border: 3px solid #478358;
+            border-radius: 8px;
+            background: #fff;
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
         }
         
         .help-text {
-            font-size: 20px;
-            color: #666;
-            margin-top: 8px;
+            font-size: 14px;
+            color: #478358;
+            margin-top: 4px;
         }
         
         .modal-buttons {
             display: flex;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
         }
         
         .btn-save {
-            flex: 1;
-            padding: 20px;
-            background: #707f7a;
+            background: #5A8348;
             color: white;
-            font-size: 26px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
+        }
+        
+        .btn-save:hover {
+            background: #6b9b57;
         }
         
         .btn-cancel {
-            flex: 1;
-            padding: 20px;
             background: #95a5a6;
             color: white;
-            font-size: 26px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-        
-        .log {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 20px;
-            border-radius: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-            font-family: 'Consolas', monospace;
-            font-size: 18px;
-        }
-        
-        .log-entry {
-            margin-bottom: 8px;
-            padding: 6px;
-            border-left: 4px solid #707f7a;
-            background: rgba(255,255,255,0.05);
         }
         
         .last-check {
-            font-size: 18px;
-            color: #999;
-            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+            margin-top: 3px;
         }
         
         @media (max-width: 768px) {
-            h1 { font-size: 32px; }
-            .pc-name { font-size: 24px; }
-            .pc-info { font-size: 16px; }
-            button { font-size: 20px; min-width: 100px; padding: 15px; }
-            .add-pc-btn { font-size: 22px; padding: 20px; }
-            .refresh-all-btn { font-size: 20px; padding: 15px; }
-            .modal h2 { font-size: 28px; }
-            label { font-size: 24px; }
-            input { font-size: 24px; padding: 12px; }
-            .help-text { font-size: 14px; }
+            h1 { font-size: 26px; }
+            .pc-name { font-size: 22px; }
+            .pc-info { font-size: 14px; }
+            .top-buttons button { font-size: 16px; padding: 10px; }
+            .button-group button {
+            font-size: 18px; font-size: 16px; padding: 10px; }
             .button-group { flex-direction: column; }
-            button { width: 100%; height: 55px; }
-            .status-light { width: 35px; height: 35px; }
-            .status-text { font-size: 22px; padding: 6px 15px; }
-            .progress-container { height: 35px; }
-            .progress-text { line-height: 35px; font-size: 16px; }
+            .button-group button {
+            font-size: 18px; width: 100%; max-width: none; }
+            .status-light { width: 30px; height: 30px; }
+            .status-text { font-size: 16px; }
+            .pc-log { font-size: 12px; max-height: 100px; }
+            .container { padding: 12px; border-width: 5px; }
+            .modal h2 { font-size: 24px; }
+            label { font-size: 18px; }
+            input { font-size: 20px; padding: 10px; }
         }
     </style>
 </head>
@@ -416,12 +427,12 @@
     <div class="container">
         <h1>🌟 좋은날금박 원격 PC</h1>
         
-        <button class="add-pc-btn" onclick="showAddModal()">+ PC 추가하기</button>
-        <button class="refresh-all-btn" onclick="checkAllPCs()">🔄 전체 상태 확인</button>
+        <div class="top-buttons">
+            <button class="add-pc-btn" onclick="showAddModal()">+ PC 추가하기</button>
+            <button class="refresh-all-btn" onclick="checkAllPCs()">🔄 전체 상태 확인</button>
+        </div>
         
         <div id="pcList" class="pc-list"></div>
-        
-        <div class="log" id="log"></div>
     </div>
     
     <div id="addModal" class="modal">
@@ -429,7 +440,7 @@
             <h2>PC 추가</h2>
             <div class="form-group">
                 <label>PC 이름</label>
-                <input type="text" id="pcName" placeholder="예: 사무실 메인 PC">
+                <input type="text" id="pcName" placeholder="예: 사무실 PC">
             </div>
             <div class="form-group">
                 <label>MAC 주소</label>
@@ -461,6 +472,7 @@
     <script>
         let pcs = JSON.parse(localStorage.getItem('pcs') || '[]');
         let pcStatus = JSON.parse(localStorage.getItem('pcStatus') || '{}');
+        let pcLogs = JSON.parse(localStorage.getItem('pcLogs') || '{}');
         let editingIndex = -1;
         let bootingTimers = {};
         
@@ -487,12 +499,16 @@
                 }
                 
                 const lastCheckText = status.lastCheck ? 
-                    `마지막 확인: ${new Date(status.lastCheck).toLocaleTimeString('ko-KR')}` : 
-                    '아직 확인 안 함';
+                    `마지막 확인: ${new Date(status.lastCheck).toLocaleTimeString('ko-KR')}` : '';
                 
                 const isBooting = status.booting;
                 const progressPercent = status.bootProgress || 0;
                 const remainingTime = status.remainingTime || 0;
+                
+                const logs = pcLogs[pc.ip] || [];
+                const logHtml = logs.map(log => 
+                    `<div class="pc-log-entry">${log}</div>`
+                ).join('');
                 
                 const item = document.createElement('div');
                 item.className = 'pc-item';
@@ -505,28 +521,60 @@
                     </div>
                     <div class="pc-info">MAC: ${pc.mac}</div>
                     <div class="pc-info">IP: ${pc.ip}:${pc.wolPort}</div>
-                    <div class="last-check">${lastCheckText}</div>
+                    ${lastCheckText ? `<div class="last-check">${lastCheckText}</div>` : ''}
                     
                     <div class="progress-container ${isBooting ? 'active' : ''}" id="progress-${index}">
                         <div class="progress-bar" style="width: ${progressPercent}%"></div>
                         <div class="progress-text">부팅 중... ${progressPercent}%</div>
                     </div>
-                    <div class="progress-time" id="time-${index}" style="display: ${isBooting ? 'block' : 'none'}">
-                        ⏱️ 남은 시간: ${Math.floor(remainingTime / 60)}분 ${remainingTime % 60}초
-                    </div>
+                    ${isBooting ? `<div class="progress-time" id="time-${index}">⏱️ 남은 시간: ${Math.floor(remainingTime / 60)}분 ${remainingTime % 60}초</div>` : ''}
                     
                     <div class="button-group">
-                        <button class="btn-wake" onclick="wakePC(${index})" ${isBooting ? 'disabled' : ''}>
-                            ⚡ PC 켜기
-                        </button>
-                        <button class="btn-check" onclick="checkPC(${index})">🔍 상태</button>
-                        <button class="btn-rdp" onclick="connectRDP(${index})">🖥️ 원격</button>
+                        <button class="btn-wake" onclick="wakePC(${index})" ${isBooting ? 'disabled' : ''}>⚡ PC 켜기</button>
+                        <button class="btn-check" onclick="checkPC(${index})">🔍 상    태</button>
+                        <button class="btn-rdp" onclick="connectRDP(${index})">🖥️ 원    격</button>
                         <button class="btn-edit" onclick="editPC(${index})">✏️</button>
                         <button class="btn-delete" onclick="deletePC(${index})">🗑️</button>
+                    </div>
+                    
+                    <div class="pc-log" id="log-${index}">
+                        ${logHtml || '<div class="pc-log-entry">로그 없음</div>'}
                     </div>
                 `;
                 list.appendChild(item);
             });
+        }
+        
+        function addPCLog(index, message) {
+            const pc = pcs[index];
+            if (!pc) return;
+            
+            const time = new Date().toLocaleTimeString('ko-KR');
+            const logEntry = `[${time}] ${message}`;
+            
+            if (!pcLogs[pc.ip]) {
+                pcLogs[pc.ip] = [];
+            }
+            
+            pcLogs[pc.ip].unshift(logEntry);
+            
+            if (pcLogs[pc.ip].length > 10) {
+                pcLogs[pc.ip] = pcLogs[pc.ip].slice(0, 10);
+            }
+            
+            localStorage.setItem('pcLogs', JSON.stringify(pcLogs));
+            
+            const logDiv = document.getElementById(`log-${index}`);
+            if (logDiv) {
+                const entry = document.createElement('div');
+                entry.className = 'pc-log-entry';
+                entry.textContent = logEntry;
+                logDiv.insertBefore(entry, logDiv.firstChild);
+                
+                while (logDiv.children.length > 10) {
+                    logDiv.removeChild(logDiv.lastChild);
+                }
+            }
         }
         
         function showAddModal() {
@@ -566,7 +614,9 @@
             localStorage.setItem('pcs', JSON.stringify(pcs));
             renderPCs();
             closeModal();
-            addLog(`✅ PC ${editingIndex >= 0 ? '수정' : '추가'} 완료: ${pc.name}`);
+            
+            const idx = editingIndex >= 0 ? editingIndex : pcs.length - 1;
+            addPCLog(idx, `✅ PC ${editingIndex >= 0 ? '수정' : '추가'} 완료`);
         }
         
         function editPC(index) {
@@ -588,17 +638,18 @@
                     delete bootingTimers[index];
                 }
                 delete pcStatus[pc.ip];
+                delete pcLogs[pc.ip];
                 localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
+                localStorage.setItem('pcLogs', JSON.stringify(pcLogs));
                 pcs.splice(index, 1);
                 localStorage.setItem('pcs', JSON.stringify(pcs));
                 renderPCs();
-                addLog(`🗑️ PC 삭제 완료: ${pc.name}`);
             }
         }
         
         async function checkPC(index) {
             const pc = pcs[index];
-            addLog(`🔍 상태 확인 중: ${pc.name}...`);
+            addPCLog(index, `🔍 상    태 확인 중...`);
             
             pcStatus[pc.ip] = { ...pcStatus[pc.ip], checking: true, booting: false };
             if (bootingTimers[index]) {
@@ -629,9 +680,9 @@
                 renderPCs();
                 
                 if (result.online) {
-                    addLog(`🟢 ${pc.name}: 켜져 있음! ✅`);
+                    addPCLog(index, `🟢 켜져 있음! ✅`);
                 } else {
-                    addLog(`🔴 ${pc.name}: 꺼져 있음`);
+                    addPCLog(index, `🔴 꺼져 있음`);
                 }
             } catch (error) {
                 pcStatus[pc.ip] = {
@@ -642,24 +693,22 @@
                 };
                 localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
                 renderPCs();
-                addLog(`🔴 ${pc.name}: 응답 없음`);
+                addPCLog(index, `🔴 응답 없음`);
             }
         }
         
         async function checkAllPCs() {
-            addLog('🔄 전체 PC 상태 확인 시작...');
             for (let i = 0; i < pcs.length; i++) {
                 await checkPC(i);
                 if (i < pcs.length - 1) {
                     await new Promise(r => setTimeout(r, 500));
                 }
             }
-            addLog('✅ 전체 상태 확인 완료!');
         }
         
         async function wakePC(index) {
             const pc = pcs[index];
-            addLog(`⚡ WOL 신호 전송 중: ${pc.name}...`);
+            addPCLog(index, `⚡ WOL 신호 전송 중...`);
             
             try {
                 const response = await fetch('/wake', {
@@ -674,21 +723,19 @@
                 
                 const result = await response.json();
                 if (result.success) {
-                    addLog(`✅ WOL 신호 전송 완료: ${pc.name}`);
-                    addLog('⏳ PC 부팅 대기 중... (2분)');
-                    
-                    // 부팅 진행 막대 시작
+                    addPCLog(index, `✅ WOL 신호 전송 완료!`);
+                    addPCLog(index, `⏳ 부팅 대기 중... (2분)`);
                     startBootProgress(index, pc);
                 } else {
-                    addLog(`❌ 오류: ${result.message}`);
+                    addPCLog(index, `❌ 오류: ${result.message}`);
                 }
             } catch (error) {
-                addLog(`❌ 전송 실패: ${error.message}`);
+                addPCLog(index, `❌ 전송 실패: ${error.message}`);
             }
         }
         
         function startBootProgress(index, pc) {
-            const totalTime = 120; // 2분 = 120초
+            const totalTime = 120;
             let elapsed = 0;
             
             pcStatus[pc.ip] = {
@@ -700,7 +747,6 @@
             localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
             renderPCs();
             
-            // 기존 타이머 정리
             if (bootingTimers[index]) {
                 clearInterval(bootingTimers[index]);
             }
@@ -717,7 +763,6 @@
                 };
                 localStorage.setItem('pcStatus', JSON.stringify(pcStatus));
                 
-                // UI 업데이트
                 const progressBar = document.querySelector(`#progress-${index} .progress-bar`);
                 const progressText = document.querySelector(`#progress-${index} .progress-text`);
                 const timeText = document.getElementById(`time-${index}`);
@@ -726,11 +771,10 @@
                 if (progressText) progressText.textContent = `부팅 중... ${progress}%`;
                 if (timeText) timeText.textContent = `⏱️ 남은 시간: ${Math.floor(remaining / 60)}분 ${remaining % 60}초`;
                 
-                // 2분 완료
                 if (elapsed >= totalTime) {
                     clearInterval(bootingTimers[index]);
                     delete bootingTimers[index];
-                    addLog(`🔍 ${pc.name} 자동 상태 확인...`);
+                    addPCLog(index, `🔍 자동 상태 확인...`);
                     checkPC(index);
                 }
             }, 1000);
@@ -740,27 +784,11 @@
             const pc = pcs[index];
             const rdpUrl = `rdp://full%20address=s:${pc.ip}:${pc.rdpPort}`;
             window.location.href = rdpUrl;
-            addLog(`🖥️ 원격 데스크톱 연결: ${pc.name}`);
+            addPCLog(index, `🖥️ 원    격 데스크톱 연결`);
         }
         
-        function addLog(message) {
-            const log = document.getElementById('log');
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            const time = new Date().toLocaleTimeString('ko-KR');
-            entry.textContent = `[${time}] ${message}`;
-            log.insertBefore(entry, log.firstChild);
-            
-            while (log.children.length > 30) {
-                log.removeChild(log.lastChild);
-            }
-        }
-        
-        // 초기 렌더링
         renderPCs();
-        addLog('🌟 좋은날금박 WOL 시스템 시작');
         
-        // 페이지 로드 시 자동 상태 확인
         if (pcs.length > 0) {
             setTimeout(checkAllPCs, 1000);
         }
