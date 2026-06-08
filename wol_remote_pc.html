@@ -790,41 +790,27 @@
             }, 1000);
         }
         
-        // ★ RDP 연결 — 앱 직접열기(핸드폰) + 파일다운로드(PC) 동시지원
+        // ★ RDP 연결 — .rdp 파일 다운로드 (더블클릭으로 연결)
         function connectRDP(index) {
             const pc = pcs[index];
-            addPCLog(index, `🖥️ 원격 연결 시도... (${pc.ip}:${pc.rdpPort})`);
-
-            // 방법1: rdp:// 링크로 앱 직접 열기 (Android Microsoft RDP앱, iOS 등)
+            const rdpContent = [
+                `full address:s:${pc.ip}:${pc.rdpPort}`,
+                `prompt for credentials:i:1`,
+                `administrative session:i:1`,
+                `screen mode id:i:2`,
+                `compression:i:1`,
+                `autoreconnection enabled:i:1`,
+            ].join('\r\n');
+            const blob = new Blob([rdpContent], { type: 'application/rdp' });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = `rdp://full%20address=s:${pc.ip}:${pc.rdpPort}&prompt%20for%20credentials=i:1`;
-            a.style.display = 'none';
+            a.href = url;
+            a.download = `${pc.name}.rdp`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-
-            // 방법2: .rdp 파일도 동시에 다운로드 (PC용 백업)
-            setTimeout(() => {
-                const rdpContent = [
-                    `full address:s:${pc.ip}:${pc.rdpPort}`,
-                    `prompt for credentials:i:1`,
-                    `administrative session:i:1`,
-                    `screen mode id:i:2`,
-                    `compression:i:1`,
-                    `autoreconnection enabled:i:1`,
-                ].join('\r\n');
-                const blob = new Blob([rdpContent], { type: 'application/rdp' });
-                const url = URL.createObjectURL(blob);
-                const b = document.createElement('a');
-                b.href = url;
-                b.download = `${pc.name}.rdp`;
-                document.body.appendChild(b);
-                b.click();
-                document.body.removeChild(b);
-                URL.revokeObjectURL(url);
-            }, 300);
-
-            addPCLog(index, `✅ 핸드폰: Microsoft RDP앱으로 열림 | PC: .rdp파일 다운로드`);
+            URL.revokeObjectURL(url);
+            addPCLog(index, `🖥️ ${pc.name}.rdp 다운로드 → 파일 더블클릭으로 연결`);
         }
         
         renderPCs();
