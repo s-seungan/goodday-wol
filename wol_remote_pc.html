@@ -449,8 +449,13 @@
             </div>
             <div class="form-group">
                 <label>외부 IP 주소</label>
-                <input type="text" id="ipAddress" placeholder="예: 123.45.67.89">
-                <div class="help-text">whatismyip.com에서 확인</div>
+                <input type="text" id="ipAddress" placeholder="예: 211.196.10.142">
+                <div class="help-text">whatismyip.com에서 확인 (WoL·RDP용)</div>
+            </div>
+            <div class="form-group">
+                <label>내부 IP (사무실 LAN) ★</label>
+                <input type="text" id="localIp" placeholder="예: 192.168.0.100">
+                <div class="help-text">★ 상태확인 정확도 향상 — cmd에서 ipconfig로 확인</div>
             </div>
             <div class="form-group">
                 <label>WOL 포트</label>
@@ -582,6 +587,7 @@
             document.getElementById('pcName').value = '';
             document.getElementById('macAddress').value = '';
             document.getElementById('ipAddress').value = '';
+            document.getElementById('localIp').value = '';
             document.getElementById('wolPort').value = '9';
             document.getElementById('rdpPort').value = '3389';
             document.getElementById('addModal').style.display = 'block';
@@ -596,6 +602,7 @@
                 name: document.getElementById('pcName').value,
                 mac: document.getElementById('macAddress').value,
                 ip: document.getElementById('ipAddress').value,
+                localIp: document.getElementById('localIp').value.trim(),
                 wolPort: document.getElementById('wolPort').value,
                 rdpPort: document.getElementById('rdpPort').value
             };
@@ -625,6 +632,7 @@
             document.getElementById('pcName').value = pc.name;
             document.getElementById('macAddress').value = pc.mac;
             document.getElementById('ipAddress').value = pc.ip;
+            document.getElementById('localIp').value = pc.localIp || '';
             document.getElementById('wolPort').value = pc.wolPort;
             document.getElementById('rdpPort').value = pc.rdpPort;
             document.getElementById('addModal').style.display = 'block';
@@ -649,8 +657,10 @@
         
         async function checkPC(index) {
             const pc = pcs[index];
-            addPCLog(index, `🔍 상    태 확인 중...`);
-            
+            // ★ 내부IP 있으면 내부IP로 체크 (외부IP는 공유기에서 막힘)
+            const checkIp = pc.localIp || pc.ip;
+            addPCLog(index, `🔍 상태 확인 중... (${pc.localIp ? '내부IP' : '외부IP'})`);
+
             pcStatus[pc.ip] = { ...pcStatus[pc.ip], checking: true, booting: false };
             if (bootingTimers[index]) {
                 clearInterval(bootingTimers[index]);
@@ -664,7 +674,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        ip: pc.ip,
+                        ip: checkIp,
                         port: pc.rdpPort
                     })
                 });
@@ -780,11 +790,41 @@
             }, 1000);
         }
         
+        // ★ RDP 연결 — 앱 직접열기(핸드폰) + 파일다운로드(PC) 동시지원
         function connectRDP(index) {
             const pc = pcs[index];
-            const rdpUrl = `rdp://full%20address=s:${pc.ip}:${pc.rdpPort}`;
-            window.location.href = rdpUrl;
-            addPCLog(index, `🖥️ 원    격 데스크톱 연결`);
+            addPCLog(index, `🖥️ 원격 연결 시도... (${pc.ip}:${pc.rdpPort})`);
+
+            // 방법1: rdp:// 링크로 앱 직접 열기 (Android Microsoft RDP앱, iOS 등)
+            const a = document.createElement('a');
+            a.href = `rdp://full%20address=s:${pc.ip}:${pc.rdpPort}&prompt%20for%20credentials=i:1`;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            // 방법2: .rdp 파일도 동시에 다운로드 (PC용 백업)
+            setTimeout(() => {
+                const rdpContent = [
+                    `full address:s:${pc.ip}:${pc.rdpPort}`,
+                    `prompt for credentials:i:1`,
+                    `administrative session:i:1`,
+                    `screen mode id:i:2`,
+                    `compression:i:1`,
+                    `autoreconnection enabled:i:1`,
+                ].join('\r\n');
+                const blob = new Blob([rdpContent], { type: 'application/rdp' });
+                const url = URL.createObjectURL(blob);
+                const b = document.createElement('a');
+                b.href = url;
+                b.download = `${pc.name}.rdp`;
+                document.body.appendChild(b);
+                b.click();
+                document.body.removeChild(b);
+                URL.revokeObjectURL(url);
+            }, 300);
+
+            addPCLog(index, `✅ 핸드폰: Microsoft RDP앱으로 열림 | PC: .rdp파일 다운로드`);
         }
         
         renderPCs();
