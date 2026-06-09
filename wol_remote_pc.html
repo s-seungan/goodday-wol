@@ -426,10 +426,17 @@
 <body>
     <div class="container">
         <h1>🌟 좋은날금박 원격 PC</h1>
-        
+
+        <div id="serverStatus" style="text-align:center;margin-bottom:6px;font-size:16px;padding:6px;border-radius:8px;background:#294731;color:#c8deba;">
+            ⏳ 서버 확인 중...
+        </div>
+
         <div class="top-buttons">
             <button class="add-pc-btn" onclick="showAddModal()">+ PC 추가하기</button>
             <button class="refresh-all-btn" onclick="checkAllPCs()">🔄 전체 상태 확인</button>
+        </div>
+        <div class="top-buttons" style="margin-top:0;">
+            <button style="flex:1;padding:10px;font-size:18px;font-weight:bold;background:#4a7c59;color:white;border:none;border-radius:10px;cursor:pointer;" onclick="showServerModal()">⚙️ 서버 주소 설정</button>
         </div>
         
         <div id="pcList" class="pc-list"></div>
@@ -474,12 +481,67 @@
         </div>
     </div>
     
+    <!-- 서버 URL 설정 모달 -->
+    <div id="serverModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center;">
+        <div style="background:#c8deba;border:6px solid #294731;border-radius:20px;padding:25px;max-width:420px;width:90%;margin:20px;">
+            <h2 style="color:#294731;font-size:26px;margin-bottom:15px;text-align:center;">⚙️ 서버 주소 설정</h2>
+            <p style="font-size:15px;color:#333;margin-bottom:10px;line-height:1.5;">
+                Render.com에서 배포한 서버 주소를 입력하세요.<br>
+                예: <b>https://goodday-wol.onrender.com</b>
+            </p>
+            <input type="text" id="serverUrlInput" placeholder="https://goodday-wol.onrender.com"
+                style="width:100%;padding:12px;font-size:18px;border:2px solid #294731;border-radius:10px;margin-bottom:10px;box-sizing:border-box;">
+            <p style="font-size:13px;color:#555;margin-bottom:15px;">※ 끝에 / 없이 입력. Render.com 배포 전이면 아래 가이드 참고.</p>
+            <div style="display:flex;gap:10px;">
+                <button onclick="saveServerUrl()" style="flex:1;padding:12px;font-size:20px;background:#294731;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:bold;">저장</button>
+                <button onclick="document.getElementById('serverModal').style.display='none'" style="flex:1;padding:12px;font-size:20px;background:#888;color:white;border:none;border-radius:10px;cursor:pointer;">취소</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // ★ 서버 URL (파일로 열 때는 Render.com 주소, 서버에서 열 때는 빈 문자열)
+        let serverUrl = localStorage.getItem('serverUrl') || '';
+
         let pcs = JSON.parse(localStorage.getItem('pcs') || '[]');
         let pcStatus = JSON.parse(localStorage.getItem('pcStatus') || '{}');
         let pcLogs = JSON.parse(localStorage.getItem('pcLogs') || '{}');
         let editingIndex = -1;
         let bootingTimers = {};
+
+        function showServerModal() {
+            document.getElementById('serverUrlInput').value = serverUrl;
+            document.getElementById('serverModal').style.display = 'flex';
+        }
+
+        function saveServerUrl() {
+            const val = document.getElementById('serverUrlInput').value.trim().replace(/\/$/, '');
+            serverUrl = val;
+            localStorage.setItem('serverUrl', val);
+            document.getElementById('serverModal').style.display = 'none';
+            pingServer();
+        }
+
+        async function pingServer() {
+            const statusEl = document.getElementById('serverStatus');
+            if (!serverUrl) {
+                statusEl.style.background = '#e74c3c';
+                statusEl.textContent = '❌ 서버 주소 미설정 — 위 ⚙️ 버튼 클릭하여 입력';
+                return;
+            }
+            try {
+                const r = await fetch(serverUrl + '/ping', { signal: AbortSignal.timeout(8000) });
+                const d = await r.json();
+                statusEl.style.background = '#294731';
+                statusEl.textContent = '🟢 서버 연결됨: ' + serverUrl;
+            } catch(e) {
+                statusEl.style.background = '#c0392b';
+                statusEl.textContent = '🔴 서버 응답 없음 (Render.com 슬립 중? 30초 후 재시도)';
+            }
+        }
+
+        // Render.com 슬립 방지 — 14분마다 핑
+        setInterval(pingServer, 14 * 60 * 1000);
         
         function renderPCs() {
             const list = document.getElementById('pcList');
@@ -670,7 +732,7 @@
             renderPCs();
             
             try {
-                const response = await fetch('/check', {
+                const response = await fetch(serverUrl + '/check', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -721,7 +783,7 @@
             addPCLog(index, `⚡ WOL 신호 전송 중...`);
             
             try {
-                const response = await fetch('/wake', {
+                const response = await fetch(serverUrl + '/wake', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -814,9 +876,10 @@
         }
         
         renderPCs();
-        
+        pingServer();
+
         if (pcs.length > 0) {
-            setTimeout(checkAllPCs, 1000);
+            setTimeout(checkAllPCs, 1500);
         }
     </script>
 </body>

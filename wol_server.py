@@ -3,16 +3,21 @@
 """
 좋은날금박 WOL 서버
 24시간 클라우드 서버 (Render.com)
-PC 상태 확인 기능 포함
 """
 
 from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
 import socket
+import struct
 import os
 
 app = Flask(__name__)
 CORS(app)
+
+# 업로드 폴더 생성
+UPLOAD_FOLDER = 'uploads'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 @app.route('/')
 def index():
@@ -50,44 +55,30 @@ def wake_on_lan():
             'message': str(e)
         }), 500
 
-@app.route('/check', methods=['POST'])
-def check_pc_status():
-    """PC 온라인 상태 확인 (TCP 포트 연결 테스트)"""
+@app.route('/upload', methods=['POST'])
+def upload_file():
     try:
-        data = request.json
-        ip_address = data.get('ip')
-        port = int(data.get('port', 3389))
-        
-        # TCP 연결 테스트 (타임아웃 3초)
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(3)
-        
-        result = sock.connect_ex((ip_address, port))
-        sock.close()
-        
-        online = (result == 0)
+        if 'file' not in request.files:
+            return jsonify({'success': False, 'message': 'No file'}), 400
+            
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'success': False, 'message': 'Empty filename'}), 400
+            
+        filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+        file.save(filepath)
         
         return jsonify({
-            'online': online,
-            'ip': ip_address,
-            'port': port,
-            'message': 'PC is online' if online else 'PC is offline'
+            'success': True,
+            'message': 'File uploaded successfully',
+            'filename': file.filename
         })
         
-    except socket.timeout:
-        return jsonify({
-            'online': False,
-            'message': 'Connection timeout - PC is offline'
-        })
     except Exception as e:
-        return jsonify({
-            'online': False,
-            'message': str(e)
-        })
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     print(f"Good Day Gold Foil - WOL Server Started!")
     print(f"Server running on port {port}")
-    print(f"Features: WOL + PC Status Check")
     app.run(host='0.0.0.0', port=port, debug=False)
