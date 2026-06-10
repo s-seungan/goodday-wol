@@ -13,7 +13,7 @@ app = Flask(__name__)
 CORS(app)
 
 # ★ 비밀번호 설정 — 여기서 변경하세요
-WOL_PASSWORD = os.environ.get('WOL_PASSWORD', 'goodday2024')
+WOL_PASSWORD = os.environ.get('WOL_PASSWORD', '5875')
 
 UPLOAD_FOLDER = 'uploads'
 if not os.path.exists(UPLOAD_FOLDER):
