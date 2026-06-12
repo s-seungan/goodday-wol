@@ -46,6 +46,7 @@ def wake_on_lan():
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        sock.sendto(magic_packet, ('255.255.255.255', port))
         sock.sendto(magic_packet, (ip_address, port))
         sock.close()
 
